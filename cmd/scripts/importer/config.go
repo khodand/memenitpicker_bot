@@ -1,4 +1,4 @@
-package config
+package main
 
 import (
 	"fmt"
@@ -6,20 +6,16 @@ import (
 	"path/filepath"
 
 	"github.com/kelseyhightower/envconfig"
-	"gopkg.in/yaml.v2"
-
 	"github.com/khodand/memenitpicker_bot/pkg/postgres"
-	"github.com/khodand/memenitpicker_bot/pkg/telegram"
+	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
-	General  General
-	Telegram telegram.Config
-	Postgres postgres.Config
-}
-
-type General struct {
-	Debug bool
+	Postgres         postgres.Config
+	PrefixPath       string `yaml:"prefixPath"`
+	ChatID           int64  `yaml:"chatID"`
+	ResultJSON       string `yaml:"resultJSON"`
+	ImportResultFile string `yaml:"importResultFile"`
 }
 
 func Init() (Config, error) {

@@ -7,11 +7,15 @@ import (
 	"sync"
 	"syscall"
 
-	"go-telegram-bot-template/cmd/config"
-	"go-telegram-bot-template/internal/bot"
-	"go-telegram-bot-template/pkg/logger"
-	ptelegram "go-telegram-bot-template/pkg/telegram"
 	"go.uber.org/zap"
+
+	"github.com/khodand/memenitpicker_bot/cmd/config"
+	"github.com/khodand/memenitpicker_bot/internal/bot"
+	"github.com/khodand/memenitpicker_bot/internal/meme"
+	"github.com/khodand/memenitpicker_bot/internal/store"
+	"github.com/khodand/memenitpicker_bot/pkg/logger"
+	"github.com/khodand/memenitpicker_bot/pkg/postgres"
+	ptelegram "github.com/khodand/memenitpicker_bot/pkg/telegram"
 )
 
 func main() {
@@ -22,12 +26,19 @@ func main() {
 
 	log := logger.New(cfg.General.Debug)
 
+	database, err := postgres.NewPgxPool(cfg.Postgres)
+	if err != nil {
+		log.Fatal("failed to init database", zap.Error(err))
+	}
+	memesDB := store.NewMemes(database)
+
 	telegramClient, err := ptelegram.NewClient(log, cfg.Telegram)
 	if err != nil {
 		log.Fatal("failed to init bot client", zap.Error(err))
 	}
 
-	telegramBot := bot.New(telegramClient)
+	memeService := meme.New(memesDB)
+	telegramBot := bot.New(telegramClient, memeService)
 	telegramBot.RegisterRoutes()
 
 	wg := &sync.WaitGroup{}

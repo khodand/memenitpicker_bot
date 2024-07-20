@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"go-telegram-bot-template/pkg/logger"
-
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 	tele "gopkg.in/telebot.v3"
+
+	"github.com/khodand/memenitpicker_bot/pkg/logger"
 )
 
 const loggerKey = "logger"
@@ -34,10 +34,10 @@ func NewClient(logger *zap.Logger, cfg Config) (*tele.Bot, error) {
 	return client, nil
 }
 
-func mwLogger(logger *zap.Logger) func(next tele.HandlerFunc) tele.HandlerFunc {
+func mwLogger(initLogger *zap.Logger) func(next tele.HandlerFunc) tele.HandlerFunc {
 	return func(next tele.HandlerFunc) tele.HandlerFunc {
 		return func(c tele.Context) error {
-			logger = logger.With(zap.String("trace", uuid.New().String()))
+			logger := initLogger.With(zap.String("trace", uuid.New().String()))
 			logger.Info("handle update", zap.String("text", c.Text()), zap.String("data", c.Data()))
 
 			start := time.Now()

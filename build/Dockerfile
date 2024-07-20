@@ -10,9 +10,9 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -installsuffix 'static' -o te
 
 FROM alpine:latest AS runtime
 
-COPY --from=builder /app/telegram-bot .
+COPY --from=builder /app/meme_bot .
 
 ENV CONFIG_PATH="/config/secret.yaml"
 VOLUME [ "/config" ]
 
-CMD ["./telegram-bot"]
+CMD ["./meme_bot"]

@@ -20,9 +20,7 @@ vendor/
 # Workspace
 .idea/
 bin/
-
-# ATTENTION: remove the comment below to include the secret config file
-# secret.*
+secret*
 
 # Go workspace file
 go.work

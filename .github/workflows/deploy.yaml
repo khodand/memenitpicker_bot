@@ -35,7 +35,7 @@ jobs:
           context: .
           file: ./build/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/telegram-bot:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/meme_bot:latest
 
       - uses: shimataro/ssh-key-action@v2
         with:
@@ -44,5 +44,5 @@ jobs:
 
       - name: Deploy
         run: |
-          rsync -avze "ssh -o StrictHostKeyChecking=no" deployments/* "$S_NAME":/root/telegram-bot/
-          ssh -o StrictHostKeyChecking=no "$S_NAME" /root/telegram-bot/start.sh
+          rsync -avze "ssh -o StrictHostKeyChecking=no" deployments/* "$S_NAME":/root/meme_bot/
+          ssh -o StrictHostKeyChecking=no "$S_NAME" /root/meme_bot/start.sh

@@ -1,0 +1,31 @@
+services:
+  app:
+    image: khodand/meme_bot:latest
+    container_name: meme_bot
+    volumes:
+      - path/cmd/config/:/config/
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    entrypoint: ["./meme_bot"]
+
+  postgres:
+    image: postgres:14.5-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=meme_bot
+      - POSTGRES_PASSWORD=meme_bot
+      - POSTGRES_DB=meme_bot
+    volumes:
+      - .shared/postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    command: postgres -c fsync=off
+    healthcheck:
+      test: pg_isready -U meme_bot
+      interval: 10s
+      timeout: 5s
+      retries: 5

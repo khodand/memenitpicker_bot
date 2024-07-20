@@ -1,12 +1,13 @@
 #!/bin/bash
 
-cd $(dirname "$0") || exit
+cd "$(dirname "$0")" || exit
 
-docker stop telegram-bot || true
-docker rm telegram-bot || true
+docker-compose down
+docker-compose pull
 
-docker pull khodand/telegram-bot:latest
+mkdir -p logs
+touch bot.log  # Creates an empty bot.log if it doesn't exist
 
-cp bot.log "logs/telegram-bot_$(date +%F).log"
-
-nohup docker run -v ./config:/config --name tgbot khodand/telegram-bot:latest 1>bot.log 2>&1 &
+cp bot.log "logs/meme_bot_$(date +%F).log"
+docker-compose up -d
+nohup docker-compose logs -f > bot.log 2>&1 &
