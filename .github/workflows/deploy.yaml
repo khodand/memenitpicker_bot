@@ -42,7 +42,7 @@ jobs:
         with:
           platforms: linux/amd64
           context: .
-          file: ./build/Dockerfile
+          file: ./cmd/scripts/importer/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/meme_importer:latest
 

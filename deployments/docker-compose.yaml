@@ -3,7 +3,7 @@ services:
     image: khodand/meme_bot:latest
     container_name: meme_bot
     volumes:
-      - path/cmd/config/:/config/
+      - /root/meme_bot/:/config/
     restart: always
     depends_on:
       postgres:
