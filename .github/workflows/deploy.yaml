@@ -28,7 +28,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push meme_bot
         uses: docker/build-push-action@v6
         with:
           platforms: linux/amd64
@@ -36,6 +36,15 @@ jobs:
           file: ./build/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/meme_bot:latest
+
+      - name: Build and push meme_importer
+        uses: docker/build-push-action@v6
+        with:
+          platforms: linux/amd64
+          context: .
+          file: ./build/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/meme_importer:latest
 
       - uses: shimataro/ssh-key-action@v2
         with:
